@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinematic Cyberpunk Envelope</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#000;
+    font-family:'Inter',sans-serif;
+    overflow:hidden;
+}
+
+/* ===== VIDEO ===== */
+#bg-video{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-2;
+    filter:brightness(0.35);
+}
+
+/* ===== SCENE ===== */
+.scene{
+    perspective:1600px;
+}
+
+/* ===== WRAPPER ===== */
+.envelope-wrapper{
+    position:relative;
+    width:360px;
+    height:240px;
+    cursor:pointer;
+    transform-style:preserve-3d;
+    transition:transform .8s ease;
+}
+
+.envelope-wrapper.open{
+    transform:translateY(-20px) rotateX(10deg);
+}
+
+/* ===== ENVELOPE BODY ===== */
+.envelope{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,255,255,0.08);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(0,255,255,0.6);
+    border-radius:14px;
+    box-shadow:0 0 45px rgba(0,255,255,0.5);
+    z-index:2;
+}
+
+/* ===== FLAP ===== */
+.flap{
+    position:absolute;
+    width:100%;
+    height:130px;
+    background:rgba(0,255,255,0.2);
+    top:0;
+    left:0;
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top;
+    transition:0.8s cubic-bezier(.77,0,.18,1);
+    backface-visibility:hidden;
+    border-top-left-radius:14px;
+    border-top-right-radius:14px;
+    z-index:4;
+    box-shadow:0 12px 28px rgba(0,255,255,0.35);
+}
+
+.envelope-wrapper.open .flap{
+    transform:rotateX(180deg);
+}
+
+/* ===== LETTER ===== */
+.letter{
+    position:absolute;
+    width:88%;
+    height:180px;
+    background:#111;
+    color:#fff;
+    left:6%;
+    top:30px;
+    border-radius:12px;
+    padding:32px;
+    transform:translateY(85%) scale(.95);
+    transform-origin:bottom;
+    transition:
+        transform 1.2s cubic-bezier(.77,0,.18,1),
+        opacity .6s ease,
+        height 1.2s ease;
+    box-shadow:0 0 35px rgba(0,255,255,0.5);
+    overflow:hidden;
+    opacity:0;
+    visibility:hidden;
+    z-index:1;
+}
+
+/* نور متحرک لبه */
+.letter::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:200%;
+    height:3px;
+    background:linear-gradient(90deg,transparent,#0ff,transparent);
+    animation:glow 2s linear infinite;
+    opacity:0;
+}
+
+@keyframes glow{
+    0%{ left:-100%; }
+    100%{ left:100%; }
+}
+
+.letter h2{
+    font-family:'Playfair Display',serif;
+    margin-bottom:18px;
+    font-size:22px;
+}
+
+.letter p{
+    font-size:15px;
+    line-height:1.9;
+}
+
+/* مرحله اول خروج */
+.envelope-wrapper.open .letter{
+    transform:translateY(-40%) scale(1);
+    height:420px;
+    opacity:1;
+    visibility:visible;
+    z-index:5;
+    overflow-y:auto;
+    transition-delay:.25s;
+}
+
+.envelope-wrapper.open .letter::before{
+    opacity:1;
+}
+
+/* ===== MUSIC BUTTON ===== */
+.music-btn{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:rgba(0,255,255,0.25);
+    border:1px solid #0ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:22px;
+    color:#0ff;
+    backdrop-filter:blur(6px);
+    transition:.3s;
+}
+
+.music-btn:hover{
+    transform:scale(1.15);
+}
+</style>
+</head>
+<body>
+
+<video autoplay muted loop playsinline id="bg-video">
+<source src="Rosita.mp4" type="video/mp4">
+</video>
+
+<div class="scene">
+    <div class="envelope-wrapper" id="envelope">
+        <div class="envelope"></div>
+        <div class="flap"></div>
+
+        <div class="letter">
+            <h2>Dear Setayesh,</h2>
+            <p>
+Since the moment I saw you, my life really changed. Maybe it sounds dramatic, but you had no idea about my life, and I was honestly scared to let you know. Yet, you brought color to my world and lit up my heart.
+<br><br>
+During the time we were good together, you said things that gave me hope, and for the first time in my life, I felt truly loved. That’s why I came back, because I felt you really cared about me. But then you said things that made me realize I was wrong, and it even made me dislike myself a bit.
+<br><br>
+Still, I remember every single moment and word, and I still can’t believe there was no feeling from your side. I truly regret my mistakes that made you disappointed in me.
+<br><br> 
+君をまるでお姫様のように見ていた
+<br><br>
+   Cian
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="music-btn" id="musicBtn">🎵</div>
+
+<audio id="audio" loop>
+<source src="Lovly.mp3" type="audio/mpeg">
+</audio>
+
+<!-- صدای باز شدن پاکت -->
+<audio id="openSound">
+<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const envelope = document.getElementById("envelope");
+const audio = document.getElementById("audio");
+const openSound = document.getElementById("openSound");
+const musicBtn = document.getElementById("musicBtn");
+
+let isPlaying = false;
+
+envelope.addEventListener("click", () => {
+    const isOpen = envelope.classList.toggle("open");
+    
+    if(isOpen){
+        openSound.currentTime = 0;
+        openSound.play().catch(()=>{});
+    }
+
+    if(!isPlaying){
+        audio.play().catch(()=>{});
+        musicBtn.textContent="⏸";
+        isPlaying=true;
+    }
+});
+
+musicBtn.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    if(isPlaying){
+        audio.pause();
+        musicBtn.textContent="🎵";
+        isPlaying=false;
+    }else{
+        audio.play().catch(()=>{});
+        musicBtn.textContent="⏸";
+        isPlaying=true;
+    }
+});
+</script>
+
+</body>
+</html>
