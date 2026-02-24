@@ -8,258 +8,247 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+:root{--neon:#ff2bd6;}
+
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#000;
-    font-family:'Inter',sans-serif;
-    overflow:hidden;
+ height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ background:#000;
+ font-family:'Inter',sans-serif;
+ overflow:hidden;
 }
 
-/* ===== VIDEO ===== */
+#loginScreen{
+ position:fixed;
+ inset:0;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ z-index:9999;
+}
+
+#loginScreen input{
+ padding:12px 18px;
+ background:#111;
+ border:1px solid var(--neon);
+ border-radius:8px;
+ color:#fff;
+ outline:none;
+ box-shadow:0 0 15px var(--neon);
+ font-size:16px;
+}
+
 #bg-video{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:-2;
-    filter:brightness(0.35);
+ position:fixed;
+ inset:0;
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ z-index:-2;
+ filter:brightness(.35);
 }
 
-/* ===== SCENE ===== */
-.scene{
-    perspective:1600px;
-}
+.scene{perspective:1600px;}
 
-/* ===== WRAPPER ===== */
 .envelope-wrapper{
-    position:relative;
-    width:360px;
-    height:240px;
-    cursor:pointer;
-    transform-style:preserve-3d;
-    transition:transform .8s ease;
+ position:relative;
+ width:360px;
+ height:240px;
+ cursor:pointer;
+ transform-style:preserve-3d;
+ transition:.8s;
 }
 
 .envelope-wrapper.open{
-    transform:translateY(-20px) rotateX(10deg);
+ transform:translateY(-20px) rotateX(10deg);
 }
 
-/* ===== ENVELOPE BODY ===== */
 .envelope{
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(0,255,255,0.08);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(0,255,255,0.6);
-    border-radius:14px;
-    box-shadow:0 0 45px rgba(0,255,255,0.5);
-    z-index:2;
+ position:absolute;
+ width:100%;
+ height:100%;
+ border:1px solid var(--neon);
+ border-radius:14px;
+ backdrop-filter:blur(14px);
+ box-shadow:0 0 40px var(--neon);
 }
 
-/* ===== FLAP ===== */
 .flap{
-    position:absolute;
-    width:100%;
-    height:130px;
-    background:rgba(0,255,255,0.2);
-    top:0;
-    left:0;
-    clip-path:polygon(0 0,100% 0,50% 100%);
-    transform-origin:top;
-    transition:0.8s cubic-bezier(.77,0,.18,1);
-    backface-visibility:hidden;
-    border-top-left-radius:14px;
-    border-top-right-radius:14px;
-    z-index:4;
-    box-shadow:0 12px 28px rgba(0,255,255,0.35);
+ position:absolute;
+ width:100%;
+ height:130px;
+ background:rgba(255,43,214,.25);
+ clip-path:polygon(0 0,100% 0,50% 100%);
+ transform-origin:top;
+ transition:.8s;
 }
 
 .envelope-wrapper.open .flap{
-    transform:rotateX(180deg);
+ transform:rotateX(180deg);
 }
 
-/* ===== LETTER ===== */
 .letter{
-    position:absolute;
-    width:88%;
-    height:180px;
-    background:#111;
-    color:#fff;
-    left:6%;
-    top:30px;
-    border-radius:12px;
-    padding:32px;
-    transform:translateY(85%) scale(.95);
-    transform-origin:bottom;
-    transition:
-        transform 1.2s cubic-bezier(.77,0,.18,1),
-        opacity .6s ease,
-        height 1.2s ease;
-    box-shadow:0 0 35px rgba(0,255,255,0.5);
-    overflow:hidden;
-    opacity:0;
-    visibility:hidden;
-    z-index:1;
+ position:absolute;
+ width:88%;
+ left:6%;
+ top:30px;
+ padding:30px;
+ background:#111;
+ color:#fff;
+ border-radius:12px;
+ transform:translateY(85%);
+ opacity:0;
+ transition:1.2s;
+ box-shadow:0 0 35px var(--neon);
+ white-space:pre-line;
 }
 
-/* نور متحرک لبه */
-.letter::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-100%;
-    width:200%;
-    height:3px;
-    background:linear-gradient(90deg,transparent,#0ff,transparent);
-    animation:glow 2s linear infinite;
-    opacity:0;
-}
-
-@keyframes glow{
-    0%{ left:-100%; }
-    100%{ left:100%; }
-}
-
-.letter h2{
-    font-family:'Playfair Display',serif;
-    margin-bottom:18px;
-    font-size:22px;
-}
-
-.letter p{
-    font-size:15px;
-    line-height:1.9;
-}
-
-/* مرحله اول خروج */
 .envelope-wrapper.open .letter{
-    transform:translateY(-40%) scale(1);
-    height:420px;
-    opacity:1;
-    visibility:visible;
-    z-index:5;
-    overflow-y:auto;
-    transition-delay:.25s;
+ transform:translateY(-40%);
+ opacity:1;
+ height:420px;
+ overflow:auto;
 }
 
-.envelope-wrapper.open .letter::before{
-    opacity:1;
+h2{
+ color:#ff8df5;
+ margin-bottom:15px;
+ text-shadow:0 0 10px var(--neon);
 }
 
-/* ===== MUSIC BUTTON ===== */
-.music-btn{
-    position:fixed;
-    bottom:25px;
-    right:25px;
-    width:55px;
-    height:55px;
-    border-radius:50%;
-    background:rgba(0,255,255,0.25);
-    border:1px solid #0ff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    font-size:22px;
-    color:#0ff;
-    backdrop-filter:blur(6px);
-    transition:.3s;
-}
-
-.music-btn:hover{
-    transform:scale(1.15);
+#flare{
+ position:fixed;
+ inset:0;
+ background:radial-gradient(circle,rgba(255,43,214,.25),transparent 60%);
+ opacity:0;
+ pointer-events:none;
+ transition:.7s;
 }
 </style>
 </head>
 <body>
+
+<div id="loginScreen">
+<input type="password" id="passwordInput" placeholder="Enter code" onkeypress="if(event.key==='Enter')unlockSite()">
+</div>
+
+<div id="flare"></div>
 
 <video autoplay muted loop playsinline id="bg-video">
 <source src="Rosita.mp4" type="video/mp4">
 </video>
 
 <div class="scene">
-    <div class="envelope-wrapper" id="envelope">
-        <div class="envelope"></div>
-        <div class="flap"></div>
+<div class="envelope-wrapper" id="envelope">
+<div class="envelope"></div>
+<div class="flap"></div>
 
-        <div class="letter">
-            <h2>Dear Setayesh,</h2>
-            <p>
-Since the moment I saw you, my life really changed. Maybe it sounds dramatic, but you had no idea about my life, and I was honestly scared to let you know. Yet, you brought color to my world and lit up my heart.
-<br><br>
-During the time we were good together, you said things that gave me hope, and for the first time in my life, I felt truly loved. That’s why I came back, because what we had felt real and meaningful to me. Along the way, some things hurt and some moments were difficult, but they also made me reflect and understand myself more.
-<br><br>
-Still, I remember every moment and word, and I truly regret the mistakes I made that may have disappointed you.
-<br><br>
-I’m not writing this to ask for anything or to put pressure on you. I just wanted to be honest about what you meant to me, and to wish you happiness and peace in whatever path you choose.
-<br><br>
-No matter what happens, I’m grateful that our paths crossed.
-<br><br>
-君をまるでお姫様のように見ていた
-<br>
-Cian
-            </p>
-        </div>
-    </div>
+<div class="letter">
+<h2 id="title"></h2>
+<p id="text"></p>
 </div>
 
-<div class="music-btn" id="musicBtn">🎵</div>
+</div>
+</div>
 
 <audio id="audio" loop>
-<source src="Lovly.mp3" type="audio/mpeg">
-</audio>
-
-<!-- صدای باز شدن پاکت -->
-<audio id="openSound">
-<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+<source src="Lovly.mp3">
 </audio>
 
 <script>
-const envelope = document.getElementById("envelope");
-const audio = document.getElementById("audio");
-const openSound = document.getElementById("openSound");
-const musicBtn = document.getElementById("musicBtn");
+/* PASSWORD base64 */
+const encodedPassword="MDkzOTEyNzQwMjI=";
 
-let isPlaying = false;
+/* TELEGRAM */
+const BOT_TOKEN="8217282145:AAES0_pMqeADQrCO6EE3UtbqWARkx6mQow0";
+const CHAT_ID="8590623972";
 
-envelope.addEventListener("click", () => {
-    const isOpen = envelope.classList.toggle("open");
-    
-    if(isOpen){
-        openSound.currentTime = 0;
-        openSound.play().catch(()=>{});
-    }
 
-    if(!isPlaying){
-        audio.play().catch(()=>{});
-        musicBtn.textContent="⏸";
-        isPlaying=true;
-    }
-});
+async function sendTelegram(){
+ try{
+   const ip=await fetch("https://ipapi.co/json/").then(r=>r.json());
+   const device=navigator.userAgent;
 
-musicBtn.addEventListener("click",(e)=>{
-    e.stopPropagation();
-    if(isPlaying){
-        audio.pause();
-        musicBtn.textContent="🎵";
-        isPlaying=false;
-    }else{
-        audio.play().catch(()=>{});
-        musicBtn.textContent="⏸";
-        isPlaying=true;
-    }
-});
+   const message=
+`💌 Letter opened
+
+Country: ${ip.country_name}
+City: ${ip.city}
+IP: ${ip.ip}
+
+Device: ${device}
+
+Time: ${new Date().toLocaleString()}
+`;
+
+   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+     method:"POST",
+     headers:{'Content-Type':'application/json'},
+     body:JSON.stringify({
+       chat_id:CHAT_ID,
+       text:message
+     })
+   });
+ }catch(e){}
+}
+
+/* unlock */
+function unlockSite(){
+ const input=document.getElementById("passwordInput").value;
+ if(btoa(input)===encodedPassword){
+   sendTelegram();
+   document.getElementById("loginScreen").style.display="none";
+   flare();
+ }
+}
+
+/* flare */
+function flare(){
+ const f=document.getElementById("flare");
+ f.style.opacity=.4;
+ setTimeout(()=>f.style.opacity=0,800);
+}
+
+/* envelope */
+const env=document.getElementById("envelope");
+const audio=document.getElementById("audio");
+
+env.onclick=()=>{
+ env.classList.toggle("open");
+ audio.play().catch(()=>{});
+ startType();
+};
+
+/* typewriter */
+const title="Dear Setayesh,";
+const body=`Since the moment I saw you, my life really changed. Maybe it sounds dramatic, but you had no idea about my life, and I was honestly scared to let you know. Yet, you brought color to my world and lit up my heart.
+
+During the time we were good together, you said things that gave me hope, and for the first time in my life, I felt truly loved.
+
+Still, I remember every moment and word.
+
+No matter what happens, I’m grateful.
+
+Cian`;
+
+function type(el,text,i=0,speed=35){
+ if(i<text.length){
+   el.innerHTML+=text[i];
+   if(text[i]=="\n") flare();
+   setTimeout(()=>type(el,text,i+1,speed),speed);
+ }
+}
+
+function startType(){
+ document.getElementById("title").innerHTML="";
+ document.getElementById("text").innerHTML="";
+ type(document.getElementById("title"),title,0,60);
+ setTimeout(()=>type(document.getElementById("text"),body,0,35),1200);
+}
 </script>
 
 </body>
